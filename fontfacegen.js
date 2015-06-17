@@ -127,7 +127,7 @@ generateTtf = function(config) {
         target = config.ttf,
         name   = config.name;
 
-    return fontforge(script, source, target, name);
+    // return fontforge(script, source, target, name);
 },
 
 generateEot = function(config) {
@@ -144,7 +144,7 @@ generateSvg = function(config) {
         target = config.svg,
         name   = config.name;
 
-    return ttf2svg(source, target, name);
+    // return ttf2svg(source, target, name);
 },
 
 generateWoff = function(config) {
@@ -183,10 +183,8 @@ generateStylesheet = function(config) {
         '    src: url("' + filename + '.eot");',
         '    src: url("' + filename + '.eot?#iefix") format("embedded-opentype"),',
         '         url('  + woff     + ') format("woff"),',
-        '         url('  + ttf      + ') format("truetype"),',
-        '         url("' + filename + '.svg#' + name + '") format("svg");',
         '    font-weight: ' + weight + ';',
-        '    font-style: ' + style + ';',
+        '    font-style:normal;',
         '}',
         '@ff-'+styleWeight+'-'+styleStyle+': "'+ name +'", helvetica, arial, sans-serif;',
         '.ff-'+styleWeight+'-'+styleStyle+'(){',
