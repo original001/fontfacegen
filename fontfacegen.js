@@ -23,6 +23,7 @@ weight_table = {
     light:          '300',
     book:           'normal',
     normal:         'normal',
+    regular:        'normal',
     medium:         '500',
     demibold:       '600',
     demi:           '600',
@@ -127,7 +128,7 @@ generateTtf = function(config) {
         target = config.ttf,
         name   = config.name;
 
-    // return fontforge(script, source, target, name);
+    return fontforge(script, source, target, name);
 },
 
 generateEot = function(config) {
@@ -144,7 +145,7 @@ generateSvg = function(config) {
         target = config.svg,
         name   = config.name;
 
-    // return ttf2svg(source, target, name);
+    return ttf2svg(source, target, name);
 },
 
 generateWoff = function(config) {
@@ -182,9 +183,9 @@ generateStylesheet = function(config) {
         '    font-family: "' + name + '";',
         '    src: url("' + filename + '.eot");',
         '    src: url("' + filename + '.eot?#iefix") format("embedded-opentype"),',
-        '         url('  + woff     + ') format("woff"),',
+        '         url('  + woff     + ') format("woff");',
         '    font-weight: ' + weight + ';',
-        '    font-style:normal;',
+        '    font-style: normal;',
         '}',
         '@ff-'+styleWeight+'-'+styleStyle+': "'+ name +'", helvetica, arial, sans-serif;',
         '.ff-'+styleWeight+'-'+styleStyle+'(){',
