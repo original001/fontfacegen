@@ -11,6 +11,7 @@
 var
 
 fs     = require('fs'),
+cp     = require ('child_process'),
 path   = require('path'),
 exec   = require('sync-exec'),
 mkdirp = require('mkdirp'),
@@ -43,9 +44,9 @@ generateFontFace = function(options) {
     var config = generateConfig(options);
 
     createDestinationDirectory(config.dest_dir);
-    generateTtf(config);
+    // generateTtf(config);
     generateEot(config);
-    generateSvg(config);
+    // generateSvg(config);
     generateWoff(config);
     generateStylesheet(config);
 
@@ -95,12 +96,12 @@ generateConfig = function(options) {
     _.dest_dir     = _.collate ? path.join(_.dest_dir, _.basename) : _.dest_dir;
     _.target       = path.join(_.dest_dir, _.basename);
     _.config_file  = _.source.replace(_.extension, '') + '.json';
-    _.ttf          = [_.target, '.ttf'].join('');
+    _.ttf          = _.source;
     _.eot          = [_.target, '.eot'].join('');
     _.svg          = [_.target, '.svg'].join('');
     _.woff         = [_.target, '.woff'].join('');
     _.css          = [_.target, '.css'].join('');
-    _.css_fontpath = '';
+    _.css_fontpath = '../';
     _.name         = getFontName(_.source);
     _.weight       = getFontWeight(_.source);
     _.style        = getFontStyle(_.source);
@@ -182,8 +183,7 @@ generateStylesheet = function(config) {
         '@font-face {',
         '    font-family: "' + name + '";',
         '    src: url("' + filename + '.eot");',
-        '    src: url("' + filename + '.eot?#iefix") format("embedded-opentype"),',
-        '         url('  + woff     + ') format("woff");',
+        '    src: local("☺︎"), url('  + woff     + ') format("woff");',
         '    font-weight: ' + weight + ';',
         '    font-style: normal;',
         '}',
@@ -296,16 +296,9 @@ ttf2eot = function(source, dest) {
 
     command = [globals.ttf2eot, quote(source), '>', quote(dest)].join(' ');
 
-    result = exec(command);
-    success = (result.status == 0);
-
-    if (! success) {
-        throw new FontFaceException(
-            'ttf2eot exited with error code: ' + result.code + '\n' +
-            result.stdout.trim() + '\n' +
-            'Your EOT file will probably not be in a working state');
-    }
-
+    result = cp.exec(command, {max_wait:1000}, function(err){
+        if (err) throw err;
+    });
     return result;
 },
 
